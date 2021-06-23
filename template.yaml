@@ -15,4 +15,4 @@ Resources:
       SecurityGroups:
         - !Ref InstanceSecurityGroup
       KeyName: ohio-key-pair
-      ImageId: 'ami-00399ec92321828f5'
+      ImageId: 'ami-0d8d212151031f51c'
