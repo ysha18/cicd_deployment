@@ -6,7 +6,7 @@ jobs:
         - image: amazon/aws-cli
     steps:
       - run:
-          command: aws cloudformation create-stack --stack-name udacity --template-body template.yml--capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" --region=us-east-2
+          command: aws cloudformation create-stack --stack-name udacity --template-body template.yml --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" --region=us-east-2
 
 workflows:
   myWorkflow:
