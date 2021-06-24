@@ -10,7 +10,7 @@ jobs:
           name: Create the infra
           command: |
             aws cloudformation deploy \
-              --template-file template.yaml \
+              --template-file template.yml \
               --stack-name my-stack
 
 workflows:
