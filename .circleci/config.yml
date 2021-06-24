@@ -1,19 +1,21 @@
 version: 2.1
 
 jobs:
-  create_infrastructure:
+  configure_infra:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "93:0f:c3:3c:ad:f9:dc:19:1b:72:73:d9:ae:bb:a7:e6"
       - checkout
       - run:
-          name: Create the infra
+          name: configure server
           command: |
-            aws cloudformation deploy \
-              --template-file template.yaml \
-              --stack-name my-stack
+            cd remote-contol
+            ansible-playbook main-remote.yml -i inventory
 
 workflows:
   myWorkflow:
     jobs:
-      - create_infrastructure
+      - configure_infra
