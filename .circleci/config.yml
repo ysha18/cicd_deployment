@@ -10,6 +10,10 @@ jobs:
             - "93:0f:c3:3c:ad:f9:dc:19:1b:72:73:d9:ae:bb:a7:e6"
       - checkout
       - run:
+          name: Install dependencies
+          command: |
+            apk add --update ansible # install the dependencies needed for your playbook
+      - run:
           name: configure server
           command: |
             cd remote_control
