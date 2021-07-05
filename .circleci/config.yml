@@ -6,6 +6,13 @@ jobs:
       - image: alpine:latest
     steps:
       - run:
+          name: install curl
+          command: |
+            apk update
+            apk upgrade
+            apk add curl
+
+      - run:
           name: smoke test server
           command: |
             if curl -s --head "https://google.com" 
