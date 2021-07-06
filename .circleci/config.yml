@@ -1,28 +1,35 @@
 version: 2.1
 
-jobs:
-  smoke_test:
-    docker:
-      - image: alpine:latest
+commands:
+  destroy_environment:
     steps:
       - run:
-          name: install curl
+          name: Destroy env
           command: |
-            apk update
-            apk upgrade
-            apk add curl
+            aws cloudformation delete-stack --stack-name my-stack
 
+jobs:
+  create_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
       - run:
-          name: smoke test server
+          name: Create the infra
           command: |
-            if curl -s --head "https://google.com" 
-            then
-              echo "It worked!"
-            else
-              echo "It failed"
-            fi
+            aws cloudformation deploy \
+              --template-file template.yaml \
+              --stack-name my-stack
+      - run:
+          name: simulate error
+          command: |
+            return 1
+
+      - destroy_environment:
+          when: on_fail
+        
 
 workflows:
   myWorkflow:
     jobs:
-      - smoke_test
+      - create_infrastructure
