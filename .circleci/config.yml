@@ -13,30 +13,31 @@ jobs:
             --template-file bucket.yaml \
             --stack-name "${CIRCLE_WORKFLOW_ID:0:7}" \
             --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID:0:7}"
-    get_last_deployment_id:
-      docker:
-      - image: amazon/aws-cli
-      steps:
-        - run:
+  get_last_deployment_id:
+    docker:
+    - image: amazon/aws-cli
+    steps:
+      - run:
           command: |
             aws cloudformation \
             list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
             --no-paginate --output text > pipelineID.txt
-    promote_to_production:
-      docker:
-      - image: amazon/aws-cli
-      steps:
-        - run:
+
+  promote_to_production:
+    docker:
+    - image: amazon/aws-cli
+    steps:
+      - run:
           command: |
             aws cloudformation deploy \
             --template-file cloudfront.yaml \
             --stack-name production-distro \
             --parameter-overrides PipelineID="${CIRCLE_WORKFLOW_ID}"
-    clean_up_old_front_end:
-      docker:
-      - image: amazon/aws-cli
-      steps:
-        - run:
+  clean_up_old_front_end:
+    docker:
+    - image: amazon/aws-cli
+    steps:
+      - run:
           command: |
             OldPipelineID=`cat pipelineID.txt`
             aws s3 rm "s3://${OldPipelineID}" --recursive
